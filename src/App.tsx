@@ -19,16 +19,16 @@ import {
 } from 'lucide-react';
 import { Toaster, toast } from 'sonner';
 
-import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/Card';
-import { Progress } from '@/components/ui/Progress';
-import { Badge } from '@/components/ui/Badge';
-import { Separator } from '@/components/ui/Separator';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Button } from '@/components/ui/button.tsx';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card.tsx';
+import { Progress } from '@/components/ui/progress.tsx';
+import { Badge } from '@/components/ui/badge.tsx';
+import { Separator } from '@/components/ui/separator.tsx';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.tsx';
 
-import { FileUpload } from '@/components/FileUpload';
-import { PdfPreview } from '@/components/PdfPreview';
-import { compressPdf, formatFileSize, CompressionLevel, CompressionResult } from '@/lib/pdf-processor';
+import { FileUpload } from '@/components/FileUpload.tsx';
+import { PdfPreview } from '@/components/PdfPreview.tsx';
+import { compressPdf, formatFileSize, CompressionLevel, CompressionResult } from '@/lib/pdf-processor.ts';
 
 type Step = 'upload' | 'config' | 'result';
 
