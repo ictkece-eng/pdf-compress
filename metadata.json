@@ -1,6 +1,6 @@
 {
-  "name": "PDFShrink - Pro PDF Compressor",
-  "description": "Compress PDF files easily while maintaining high quality. Features intuitive UI, multiple compression levels, and instant previews.",
+  "name": "PDF Pekerja Keras - Ultra Efficient",
+  "description": "Powerful PDF optimization tool using advanced structural stripping (PieceInfo, XMP, StructTree) to achieve maximum size reduction without losing visual quality or breaking digital signatures.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }

@@ -35,10 +35,11 @@ type Step = 'upload' | 'config' | 'result';
 export default function App() {
   const [step, setStep] = useState<Step>('upload');
   const [file, setFile] = useState<File | null>(null);
-  const [level, setLevel] = useState<CompressionLevel>('balanced_50');
+  const [level, setLevel] = useState<CompressionLevel>('ultra_max');
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<CompressionResult | null>(null);
   const [progress, setProgress] = useState(0);
+  const [statusMessage, setStatusMessage] = useState('Memulai optimasi...');
 
   // Handle file selection
   const handleFileSelect = (selectedFile: File) => {
@@ -54,17 +55,34 @@ export default function App() {
     setProgress(0);
     
     // Simulate progress
+    const messages = [
+      'Memindai struktur dokumen...',
+      'Membersihkan metadata PieceInfo...',
+      'Menghapus StructTree & Thumbnails...',
+      'Mengoptimasi aliran objek...',
+      'Memverifikasi integritas TTD Digital...',
+      'Menyelesaikan paket data...'
+    ];
+
+    let msgIdx = 0;
     const interval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 90) return prev;
-        return prev + 10;
+        if (prev >= 95) return prev;
+        const next = prev + 5;
+        if (next % 15 === 0 && msgIdx < messages.length - 1) {
+          msgIdx++;
+          setStatusMessage(messages[msgIdx]);
+        }
+        return next;
       });
-    }, 200);
+    }, 150);
 
     try {
+      setStatusMessage(messages[0]);
       const res = await compressPdf(file, level);
       setResult(res);
       setProgress(100);
+      setStatusMessage('Optimasi Selesai!');
       setTimeout(() => {
         setStep('result');
         setIsProcessing(false);
@@ -108,7 +126,7 @@ export default function App() {
           <div className="w-8 h-8 bg-[#2563EB] rounded-md flex items-center justify-center text-white text-xs font-bold ring-2 ring-blue-100 italic">
             PDF
           </div>
-          <span className="font-bold text-xl text-[#2563EB] tracking-tight">Compressor Pro</span>
+          <span className="font-bold text-xl text-[#2563EB] tracking-tight">Pekerja Keras</span>
         </div>
         
         <div className="flex gap-6 items-center text-sm font-semibold text-[#64748B]">
@@ -134,22 +152,22 @@ export default function App() {
             >
               <div className="text-center mb-10">
                 <Badge className="bg-[#D1FAE5] text-[#065F46] hover:bg-[#D1FAE5] border-none mb-4 uppercase text-[10px] tracking-widest font-bold">
-                  High Performance Compression
+                  Ultra Performance Compression Engine
                 </Badge>
                 <h1 className="text-5xl font-extrabold tracking-tight text-[#1E293B] mb-4">
-                  Compress PDF while <span className="text-[#2563EB]">preserving quality</span>
+                  Compress PDF <span className="text-[#2563EB]">tanpa pecah</span>
                 </h1>
                 <p className="text-[#64748B] text-lg max-w-xl mx-auto">
-                  The professional way to optimize your documents. Fast, secure, and intuitive for teams and individuals.
+                  Optimasi dokumen profesional dengan jaminan kualitas visual tetap tajam dan Tanda Tangan Digital tetap aman.
                 </p>
               </div>
 
               <FileUpload onFileSelect={handleFileSelect} isProcessing={isProcessing} />
               
               <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <BenefitCard theme="polish" title="Secure Encryption" desc="256-bit SSL ensures your data stays private." />
-                <BenefitCard theme="polish" title="Batch Packing" desc="Efficient object stream optimization." />
-                <BenefitCard theme="polish" title="Format Integrity" desc="Never break your PDF structure for size." />
+                <BenefitCard theme="polish" title="Deep Structural Strip" desc="Removes PieceInfo, StructTree, and XMP metadata without losing visual data." />
+                <BenefitCard theme="polish" title="Object Stream Packing" desc="Aggressively packs internal objects into efficient compressed streams." />
+                <BenefitCard theme="polish" title="Signature Guard" desc="Advanced appearance stream preservation for digital signatures." />
               </div>
             </motion.div>
           )}
@@ -214,18 +232,18 @@ export default function App() {
                     desc="Keseimbangan terbaik, target ukuran file 50% lebih kecil" 
                   />
                   <OptionCard 
-                    active={level === 'extreme'} 
-                    onClick={() => setLevel('extreme')}
-                    title="Extreme Compression" 
-                    desc="Ukuran terkecil, cocok untuk berbagi cepat" 
+                    active={level === 'ultra_max'} 
+                    onClick={() => setLevel('ultra_max')}
+                    title="Ultra Max (Target 80%)" 
+                    desc="Hasil maksimal, pembersihan struktur terdalam tanpa pecah" 
                   />
                 </div>
 
                 <div className="mt-auto space-y-4">
                   {isProcessing && (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                        <Progress value={progress} className="h-1.5 bg-[#F1F5F9]" />
-                       <p className="text-[10px] text-center font-bold text-[#64748B] uppercase tracking-wider">Optimizing Assets...</p>
+                       <p className="text-[10px] text-center font-bold text-[#2563EB] uppercase tracking-wider animate-pulse italic">{statusMessage}</p>
                     </div>
                   )}
                   <div className="flex gap-4">
@@ -260,8 +278,8 @@ export default function App() {
               <div className="w-16 h-16 bg-[#D1FAE5] text-[#065F46] rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h2 className="text-3xl font-bold text-[#1E293B] mb-2 font-sans">Compression Complete</h2>
-              <p className="text-[#64748B] mb-8 font-medium">Your document has been professionally optimized.</p>
+              <h2 className="text-3xl font-bold text-[#1E293B] mb-2 font-sans">Optimasi Berhasil</h2>
+              <p className="text-[#64748B] mb-8 font-medium">Dokumen Anda telah dioptimasi dengan kualitas pixel-perfect.</p>
               
               <div className="flex justify-center items-center gap-12 mb-10">
                 <div>
