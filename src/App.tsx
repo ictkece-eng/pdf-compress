@@ -17,18 +17,19 @@ import {
   ExternalLink,
   ArrowLeft
 } from 'lucide-react';
-import { Toaster, toast } from 'sonner';
+import { Toaster } from './components/sonner';
+import { toast } from 'sonner';
 
-import { Button } from '@/components/elements/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/elements/card';
-import { Progress } from '@/components/elements/progress';
-import { Badge } from '@/components/elements/badge';
-import { Separator } from '@/components/elements/separator';
-import { Tabs, TabsList, TabsTrigger } from '@/components/elements/tabs';
+import { Button } from './components/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from './components/card';
+import { Progress } from './components/progress';
+import { Badge } from './components/badge';
+import { Separator } from './components/separator';
+import { Tabs, TabsList, TabsTrigger } from './components/tabs';
 
-import { FileUpload } from '@/components/FileUpload';
-import { PdfPreview } from '@/components/PdfPreview';
-import { compressPdf, formatFileSize, CompressionLevel, CompressionResult } from '@/lib/pdf-processor';
+import { FileUpload } from './components/FileUpload';
+import { PdfPreview } from './components/PdfPreview';
+import { compressPdf, formatFileSize, CompressionLevel, CompressionResult } from './lib/pdf-processor';
 
 type Step = 'upload' | 'config' | 'result';
 
