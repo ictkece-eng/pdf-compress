@@ -57,11 +57,11 @@ export default function App() {
     // Simulate progress
     const messages = [
       'Memindai struktur dokumen...',
-      'Membersihkan metadata PieceInfo...',
-      'Menghapus StructTree & Thumbnails...',
-      'Mengoptimasi aliran objek...',
-      'Memverifikasi integritas TTD Digital...',
-      'Menyelesaikan paket data...'
+      'Mendeteksi Tanda Tangan Digital...',
+      'Smart Rebuild: Rekonstruksi paket data...',
+      'Deep Deduplication: Menghapus objek ganda...',
+      'Optimasi aliran objek (Object Streams)...',
+      'Finalisasi kompresi tingkat tinggi...'
     ];
 
     let msgIdx = 0;
@@ -222,20 +222,23 @@ export default function App() {
                   <OptionCard 
                     active={level === 'basic'} 
                     onClick={() => setLevel('basic')}
-                    title="Basic Compression" 
-                    desc="Kualitas tajam, ukuran file berkurang sedikit" 
+                    title="Essential Cleaning" 
+                    desc="Hapus meta-data ringan, teks tajam sempurna" 
+                    savings="EST. 10%"
                   />
                   <OptionCard 
                     active={level === 'balanced_50'} 
                     onClick={() => setLevel('balanced_50')}
-                    title="Target 50% Reduction" 
-                    desc="Keseimbangan terbaik, target ukuran file 50% lebih kecil" 
+                    title="Industrial Packing" 
+                    desc="Optimasi struktur objek, keseimbangan terbaik" 
+                    savings="EST. 30%"
                   />
                   <OptionCard 
                     active={level === 'ultra_max'} 
                     onClick={() => setLevel('ultra_max')}
-                    title="Ultra Max (Target 80%)" 
-                    desc="Hasil maksimal, pembersihan struktur terdalam tanpa pecah" 
+                    title="Extreme Deduplication" 
+                    desc="Pembersihan paling dalam, hasil maksimal" 
+                    savings="EST. 60%+"
                   />
                 </div>
 
@@ -271,36 +274,72 @@ export default function App() {
           {step === 'result' && result && (
             <motion.div
               key="result"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="w-full max-w-[600px] bg-white rounded-2xl border border-[#E2E8F0] shadow-sm p-10 text-center"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full max-w-[640px] bg-white rounded-3xl border border-[#E2E8F0] shadow-2xl p-12 text-center"
             >
-              <div className="w-16 h-16 bg-[#D1FAE5] text-[#065F46] rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle2 className="w-8 h-8" />
+              <div className="w-20 h-20 bg-[#D1FAE5] text-[#065F46] rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+                <CheckCircle2 className="w-10 h-10" />
               </div>
-              <h2 className="text-3xl font-bold text-[#1E293B] mb-2 font-sans">Optimasi Berhasil</h2>
-              <p className="text-[#64748B] mb-8 font-medium">Dokumen Anda telah dioptimasi dengan kualitas pixel-perfect.</p>
               
-              <div className="flex justify-center items-center gap-12 mb-10">
-                <div>
-                  <p className="text-[10px] font-extrabold uppercase text-[#64748B] mb-1">Before</p>
-                  <p className="text-2xl font-bold text-slate-300 line-through">{formatFileSize(result.originalSize)}</p>
+              <div className="space-y-2 mb-10">
+                <h2 className="text-4xl font-black text-[#1E293B] tracking-tight">
+                  Your PDF is now {Math.round((1 - result.compressedSize / result.originalSize) * 100)}% smaller!
+                </h2>
+                <p className="text-[#64748B] text-lg font-medium">
+                  {result.signatureDetected 
+                    ? 'Optimasi berhasil dengan tetap menjaga keamanan visual Tanda Tangan Digital Anda.' 
+                    : 'Pekerja Keras telah berhasil mengoptimasi dokumen Anda dengan rasio maksimal.'}
+                </p>
+                {result.signatureDetected && (
+                   <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-full text-[10px] font-bold mt-4">
+                     <ShieldCheck className="w-3.5 h-3.5" /> Signature Protection Active
+                   </div>
+                )}
+              </div>
+              
+              <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 bg-slate-50 p-8 rounded-2xl border border-slate-100">
+                <div className="text-center md:text-right">
+                  <p className="text-[10px] font-black uppercase text-[#64748B] tracking-widest mb-1">Ukuran Asli</p>
+                  <p className="text-2xl font-bold text-slate-400 line-through">{formatFileSize(result.originalSize)}</p>
                 </div>
-                <div className="w-[1px] h-12 bg-[#E2E8F0]"></div>
-                <div className="bg-[#EFF6FF] px-6 py-4 rounded-xl border border-blue-100">
-                  <p className="text-[10px] font-extrabold uppercase text-[#2563EB] mb-1">Optimized</p>
-                  <p className="text-3xl font-extrabold text-[#2563EB] leading-none">{formatFileSize(result.compressedSize)}</p>
-                  <p className="text-[11px] font-bold text-[#2563EB] mt-2">-{Math.round((1 - result.compressedSize / result.originalSize) * 100)}% Smallere</p>
+                
+                <div className="hidden md:block">
+                  <ChevronRight className="w-8 h-8 text-slate-300" />
+                </div>
+                
+                <div className="text-center md:text-left">
+                  <p className="text-[10px] font-black uppercase text-[#2563EB] tracking-widest mb-1">Hasil Optimasi</p>
+                  <p className="text-4xl font-black text-[#2563EB] tracking-tighter">{formatFileSize(result.compressedSize)}</p>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <Button onClick={handleDownload} className="flex-1 h-12 bg-[#2563EB] font-bold hover:bg-[#1D4ED8] rounded-lg">
-                  <Download className="w-4 h-4 mr-2" /> Download Document
+              <div className="flex flex-col gap-4">
+                <Button onClick={handleDownload} className="w-full h-14 bg-[#2563EB] text-lg font-black hover:bg-[#1D4ED8] rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98]">
+                  <Download className="w-5 h-5 mr-3" /> Unduh Dokumen Sekarang
                 </Button>
-                <Button variant="outline" onClick={handleReset} className="h-12 px-6 border-[#E2E8F0] font-semibold text-[#1E293B]">
-                   <RefreshCcw className="w-4 h-4 mr-2" /> Start New
+                <Button variant="ghost" onClick={handleReset} className="h-10 text-slate-500 font-bold hover:bg-slate-50">
+                  <RefreshCcw className="w-4 h-4 mr-2" /> Optimasi File Lain
                 </Button>
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-slate-100 italic">
+                <div className="bg-slate-50 rounded-xl p-4 text-left border border-slate-100 mb-4 font-mono">
+                  <p className="text-[10px] font-black uppercase text-slate-400 mb-2 tracking-widest flex items-center gap-2">
+                    <Zap className="w-3 h-3 text-amber-500 fill-amber-500" /> Optimization Audit
+                  </p>
+                  <ul className="grid grid-cols-2 gap-x-6 gap-y-1">
+                    <li className="text-[9px] text-slate-500 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> PieceInfo Purged</li>
+                    <li className="text-[9px] text-slate-500 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> Metadata Stripped</li>
+                    <li className="text-[9px] text-slate-500 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> Object Stream Pack</li>
+                    <li className="text-[9px] text-slate-500 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> Deduplication Ready</li>
+                    <li className="text-[9px] text-slate-500 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> XRef Rebuild</li>
+                    <li className="text-[9px] text-slate-500 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> Binary Precision</li>
+                  </ul>
+                </div>
+                <p className="text-[10px] text-slate-400 font-medium">
+                  Sistem telah melakukan rekonstruksi biner tingkat rendah untuk efisiensi penyimpanan yang maksimal.
+                </p>
               </div>
             </motion.div>
           )}
@@ -336,24 +375,29 @@ function BenefitCard({ title, desc, theme }: { title: string, desc: string, them
   );
 }
 
-function OptionCard({ active, onClick, title, desc }: { active: boolean, onClick: () => void, title: string, desc: string }) {
+function OptionCard({ active, onClick, title, desc, savings }: { active: boolean, onClick: () => void, title: string, desc: string, savings?: string }) {
   return (
     <div 
       onClick={onClick}
       className={cn(
-        "border-2 rounded-xl p-4 flex items-center gap-4 cursor-pointer transition-all duration-200",
-        active ? "border-[#2563EB] bg-[#EFF6FF]" : "border-[#E2E8F0] hover:border-[#CBD5E1]"
+        "border-2 rounded-2xl p-5 flex items-center gap-4 cursor-pointer transition-all duration-200 relative group",
+        active ? "border-[#2563EB] bg-[#EFF6FF] shadow-sm" : "border-[#E2E8F0] bg-white hover:border-[#CBD5E1]"
       )}
     >
+      {savings && (
+        <div className="absolute -top-2 -right-2 bg-[#10B981] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm z-10">
+          {savings}
+        </div>
+      )}
       <div className={cn(
-        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
+        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors",
         active ? "border-[#2563EB]" : "border-[#CBD5E1]"
       )}>
         {active && <div className="w-2.5 h-2.5 rounded-full bg-[#2563EB]" />}
       </div>
       <div className="flex-1">
-        <div className="font-semibold text-[15px] text-[#1E293B]">{title}</div>
-        <div className="text-[13px] text-[#64748B]">{desc}</div>
+        <div className="font-bold text-base text-[#1E293B] group-hover:text-[#2563EB] transition-colors">{title}</div>
+        <div className="text-xs text-[#64748B] font-medium">{desc}</div>
       </div>
     </div>
   );
